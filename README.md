@@ -54,6 +54,28 @@ Two plugin directories ship with this work:
 
 Plugin source includes utility scripts (`write_skills.py`, `fix_skill_order.py`) for managing skill ordering and packaging.
 
+#### Monolith or task-scoped plugins
+
+The marketplace publishes the same 226 skills two ways, and you enable whichever fits:
+
+- **`prompt-library`** is the monolith. All 226 skills in one plugin. Loading everything costs roughly 14.7k tokens of skill-listing space, which overruns the listing budget and truncates skill descriptions, so this is best for browsing rather than daily use.
+- **`plugins/pl-*`** are 23 task-scoped plugins, 4 to 28 skills each. Enable only the ones matching the work in front of you. A typical engineering plus writing selection runs under 3k tokens.
+
+`prompt-library-plugin/skills/` is the **single source of truth**. The `pl-*` plugins are generated from it and are wiped and rebuilt on every run, so never hand-edit a skill under `plugins/`.
+
+To upgrade the monolith and trickle the change down:
+
+```bash
+# 1. edit or add skills in prompt-library-plugin/skills/
+# 2. if you added a skill, assign it to a group in groups.json
+node scripts/split.mjs --check   # validate the mapping, write nothing
+node scripts/split.mjs           # rebuild all 23 child plugins + marketplace.json
+```
+
+The script fails loudly rather than silently dropping work: it errors if any skill is unassigned, assigned to two groups, or named in `groups.json` but absent from the monolith.
+
+`groups.json` holds the mapping. Moving a skill between plugins is a one-line edit there followed by a rebuild.
+
 ### Examples and guidelines
 
 - `examples/` shows the templates in action on real tasks.
