@@ -75,7 +75,7 @@ Both correction rounds were caught by manual spot-checking rather than by the de
 
 This sweep finds **output-format drift** only. It cannot detect **task redirects**, where the 3.0 version does a different job than the original. Two such cases were found incidentally during Stage 1 upgrades:
 
-- `biblical_translator`: original was a style-transfer request (rewrite text in biblical prose); 3.0 reinterpreted it as scripture translation.
+- `biblical_translator`: original was a style-transfer request (rewrite text in biblical prose); 3.0 reinterpreted it as scripture translation. RESOLVED 2026-08-19: the 4.0 XML and Markdown were fully re-authored against the style-transfer task (Chain-of-Verification + Self-Refine), with a pass/fail Source Intent regression test guarding against the drift returning. See the ORIGINAL_PROMPT note in `PromptLibrary-4.0/XML/biblical_translator.xml` and `KNOWN_ISSUES.md`.
 - `character`: original was act-as-a-fictional-character roleplay; 3.0 became an elaborate Tree-of-Thought character-design tool.
 
 Both were caught only because an agent happened to read the original alongside the 3.0 source. That check is now a required Stage 1 step (`intent_drift_found` in the manifest), so the remaining 142 get it automatically. The 82 already upgraded did not all receive it, and the first 47 from wave 1 definitely did not.
