@@ -81,3 +81,22 @@ This sweep finds **output-format drift** only. It cannot detect **task redirects
 Both were caught only because an agent happened to read the original alongside the 3.0 source. That check is now a required Stage 1 step (`intent_drift_found` in the manifest), so the remaining 142 get it automatically. The 82 already upgraded did not all receive it, and the first 47 from wave 1 definitely did not.
 
 **Recommendation:** a semantic drift check over the 47 wave-1 files would need agent time, unlike this sweep. Worth doing, but it is not free.
+
+## Example-Leak Sweep (2026-08-19)
+
+A third drift class was found and swept: **example-becomes-identity**, where
+the original prompt's sample first request ("My first request is ...") gets
+promoted into the persona's Domain header, Primary Goal, and expertise during
+upgrades, narrowing a general persona to one scenario. Detection was a
+mechanical extraction (example line vs. Domain header and Primary Goal for
+all 226 files) followed by a full-dump semantic judgment pass. Five files
+confirmed and fixed the same day: `digital_art_gallery_guide` (severe),
+`accountant` (severe, plus an invented Python-modeling methodology),
+`doctor` (moderate), `philosophy_teacher` (mild-moderate),
+`public_speaking_coach` (mild). Each now carries a "SCOPE DRIFT, RESOLVED
+2026-08-19" note in its Original Prompt section and a regression test in
+PROMPT_TESTING. Details in `KNOWN_ISSUES.md`. Keyword saturation alone
+produced false positives the judgment pass cleared (e.g.,
+`speech_language_pathologist_slp`, whose stuttering focus is in the original
+task text, and `english_pronunciation_helper`, whose Turkish target is
+original), so future re-runs of this sweep should keep the semantic pass.

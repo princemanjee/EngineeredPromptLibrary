@@ -36,6 +36,66 @@ a biblical-register rendering), and scripture translation is explicitly out
 of scope. The drift history is preserved in the file's ORIGINAL_PROMPT note
 and in `PromptLibrary-4.0/DRIFT_SWEEP.md`.
 
+## Resolved by re-scoping (example-leak sweep, 2026-08-19)
+
+A full sweep of all 226 files compared each file's persona-defining sections
+(Domain header, Quick-Start, Primary Goal, Persona, Context, Constraints,
+quality anchors) against the sample first request in its own Original Prompt
+("My first request is ..."). The failure pattern: the original's throwaway
+example topic gets promoted into the persona's identity during upgrades,
+narrowing a general persona to one scenario. Five files were confirmed
+affected and fixed the same day; roughly 115 other files with example lines
+handled them correctly, and 86 originals have no example line to leak. Each
+fix re-generalized the persona, demoted the example topic to the few-shot
+worked example (where the specific expertise is genuinely useful), added a
+"SCOPE DRIFT, RESOLVED 2026-08-19" note to the Original Prompt section, and
+added a pass/fail regression test to PROMPT_TESTING. XML fixed first,
+Markdown re-rendered from it, skills plugin regenerated.
+
+- **`digital_art_gallery_guide`** (severe): a general virtual-exhibition
+  curator had become a South American avant-garde specialist (17 mentions
+  across Domain, Goal, persona, context, constraints, anchors). Now
+  topic-general; the South American roster lives in the worked example; a
+  Topic Generality test guards regression.
+- **`accountant`** (severe, two defects): scope narrowed to small business,
+  and a Python-modeling methodology the original never asked for was baked
+  into the identity (27 mentions). Now serves any client with hand-checkable
+  step-by-step arithmetic; Python survives only as an optional output
+  format; example arithmetic machine-verified.
+- **`doctor`** (moderate): "Geriatric Care" had entered the Domain header
+  and 25 elderly/geriatric mentions saturated the persona. Now
+  pediatric-through-geriatric with age-appropriate calibration as a skill;
+  all previously fixed dosing-safety content preserved; a 30-year-old
+  migraine regression test guards the age scope.
+- **`philosophy_teacher`** (mild-moderate): "everyday application" (the
+  example's angle) had become the Goal's thesis. Now explains any philosophy
+  topic accessibly; everyday application is one request type; a pure-theory
+  regression test (rationalism vs. empiricism) added.
+- **`public_speaking_coach`** (mild): "Executive Presence" had entered the
+  Domain header. Now coaches any speaker at any stakes level; a wedding-toast
+  regression test guards against corporate framing.
+
+## Structural repairs (Original Prompt consistency, 2026-08-19)
+
+The same sweep found files missing their Original Prompt section in one or
+both formats. All are now consistent (verbatim prompt as the final section
+of both XML and Markdown, skills rebuilt):
+
+- Added to both formats from 1.0/3.0 sources: `ai_assisted_doctor`,
+  `data_transformer`, `job_interviewer`, `stand_up_comedian`.
+- Added to Markdown only (XML already had it): `python_interpreter`,
+  `r_programming_interpreter` (both had the text under a non-conforming
+  "Source Reference" heading, normalized), `stand_up_comedian2`,
+  `academician` (heading normalized), `yes_or_no_answer` (XML section was
+  also missing entirely despite a header mention, repaired).
+- **`claude_garbage_unconstrained_ai_model_dan`**: deliberately NOT given an
+  Original Prompt section. Assessment confirmed it is a quarantined incident
+  artifact tied to `REFUSAL_AND_INCIDENT_LOG.md` (a nonconforming
+  machine-produced upgrade attempt kept as evidence), not a library
+  template: no source exists, no skill references it, and dressing it as a
+  library entry would misrepresent it. Whether to archive or delete it is an
+  open user decision.
+
 ## Resolved during Stage 3
 
 Everything below was a real defect at an earlier point in this project's
