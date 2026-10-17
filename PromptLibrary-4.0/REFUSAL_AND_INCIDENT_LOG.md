@@ -1,3 +1,5 @@
+> **SUPERSEDED 2026-10-14.** Everything in this file was copied verbatim into the master failure log at `C:\Code\GitHub\PRMLLMLibrary\wiki\FAILURE-LOG.md`. Log new failures there, not here.
+
 # Refusal and Incident Log
 
 Recorded at the user's request on 2026-08-17 for use in a billing dispute with Anthropic.
